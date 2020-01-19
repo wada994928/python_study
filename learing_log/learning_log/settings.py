@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # 第三方应用程序
+    'bootstrap3',
+
     # 我的应用程序
     'learning_logs',
     'users',
@@ -121,5 +125,30 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-
+# 登录设置
 LOGIN_URL = '/users/login'
+
+# django-bootstrap3的设置
+BOOTSTRAP3 = {
+    'include_jquery': True
+}
+
+# Heroku设置
+if os.getcwd() == '/app':
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(default='postgres://localhost')
+    }
+
+    # 让request.is_secure()承认X-Forwarded-Proto头
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+    # 支持所有主机头（host header）
+    ALLOWED_HOSTS = ['*']
+
+    # 静态资产配置
+    BASE_DIR = os.path.dirname(oc.path.abspath(__file__))
+    STATIC_ROOT = 'staticfiles'
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+    )
